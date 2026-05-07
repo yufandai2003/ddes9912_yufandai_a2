@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Tips : MonoBehaviour
 {
     public static Tips instance;
-    public float noticeShowDuration = 1f;
+    public float noticeShowDuration = 3f;
 
     private static Queue<string> noticeQueue = new Queue<string>();
     private bool isShowingNotice = false;
@@ -33,7 +33,7 @@ public class Tips : MonoBehaviour
     IEnumerator ShowNotice(string noticeText)
     {
         isShowingNotice = true;
-        GameObject noticeObj = Instantiate(Resources.Load<GameObject>("Tiop"), this.transform);
+        GameObject noticeObj = Instantiate(Resources.Load<GameObject>("Tip"), this.transform);
         Text noticeTextObj = noticeObj.transform.GetChild(0).GetComponentInChildren<Text>();
         noticeTextObj.text = noticeText;
 

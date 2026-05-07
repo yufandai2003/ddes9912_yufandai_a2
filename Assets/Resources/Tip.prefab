@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 5756536774487909081}
   - component: {fileID: 8445551986984501988}
   m_Layer: 5
-  m_Name: Tiop
+  m_Name: Tip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

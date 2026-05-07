@@ -18,11 +18,10 @@ public class UpRollerParentSpring : MonoBehaviour
     [Header("Bounce Frequency (Smaller = Slower)")]
     public float shakeInterval = 0.15f;
 
-    [Header("Is bouncing currently allowed")]
     private float shakeTimer;
-
     private Rigidbody rb;
-    private float baseY; // Initial base position
+    private float baseY;
+    private HandleRotator _handle;
 
     void Start()
     {
@@ -30,6 +29,7 @@ public class UpRollerParentSpring : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+        _handle = GetComponentInChildren<UpRollerSpring>()?.handleRotator;
     }
 
     void FixedUpdate()
@@ -40,20 +40,16 @@ public class UpRollerParentSpring : MonoBehaviour
 
     void Update()
     {
-        var handle = GetComponentInChildren<UpRollerSpring>()?.handleRotator;
-        if (handle == null || handle.rotateState == 0)
+        if (_handle == null || _handle.rotateState == 0)
         {
             shakeTimer = 0;
             return;
         }
 
-        // Control bounce frequency - Core logic
         shakeTimer += Time.deltaTime;
         if (shakeTimer >= shakeInterval)
         {
             shakeTimer = 0;
-
-            // Gently bounce between initial position and initial position + 0.02
             float randomY = Random.Range(baseY, baseY + maxOffsetY);
             transform.position = new Vector3(transform.position.x, randomY, transform.position.z);
         }
