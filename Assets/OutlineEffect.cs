@@ -11,7 +11,7 @@ public class OutlineEffect : MonoBehaviour
         _renderer = GetComponent<Renderer>();
         _originalMaterial = _renderer.material;
 
-        // 创建一个自发光材质（外圈柔和高亮，不覆盖模型）
+        // Create an emissive material variant for the highlight effect
         _emitMaterial = new Material(_originalMaterial);
         _emitMaterial.EnableKeyword("_EMISSION");
         _emitMaterial.SetColor("_EmissionColor", Color.cyan * 0.4f);

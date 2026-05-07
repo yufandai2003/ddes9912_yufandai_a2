@@ -3,26 +3,24 @@ using System.Collections.Generic;
 
 public class ClickObject : MonoBehaviour
 {
-    [Header("当前物体对应步骤 0=洗衣机 1=洗衣篮 2=挤压机 3=晾衣架")]
+    [Header("Step index for this object: 0=Washing Machine 1=Laundry Basket 2=Wringer 3=Drying Rack")]
     public int stepNum;
 
-    // 自动找到的所有带渲染器的子物体
+    // All child renderers that will receive the outline effect
     private List<OutlineEffect> _outlineList = new List<OutlineEffect>();
 
     void Awake()
     {
-        // 遍历自身 + 所有子物体、孙物体，自动找带Renderer的物体
+        // Recursively search self and all children for Renderer components
         FindAllRenderersInChildren(transform);
     }
 
-    // 递归遍历所有子物体，自动加轮廓
+    // Recursively adds OutlineEffect to all objects with a Renderer
     void FindAllRenderersInChildren(Transform parent)
     {
-        // 判断当前物体有没有渲染器
         Renderer render = parent.GetComponent<Renderer>();
         if (render != null)
         {
-            // 有渲染器 → 自动添加/获取轮廓脚本
             OutlineEffect outline = parent.GetComponent<OutlineEffect>();
             if (outline == null)
                 outline = parent.gameObject.AddComponent<OutlineEffect>();
@@ -30,7 +28,6 @@ public class ClickObject : MonoBehaviour
             _outlineList.Add(outline);
         }
 
-        // 继续遍历子物体（孙物体也会遍历）
         foreach (Transform child in parent)
         {
             FindAllRenderersInChildren(child);
@@ -39,7 +36,7 @@ public class ClickObject : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        // 只有当前步骤可点击 → 全部高亮
+        // Only highlight if this step is currently active
         if (MainManager.instance.CanClickStep(stepNum))
         {
             foreach (var ol in _outlineList)
@@ -49,18 +46,16 @@ public class ClickObject : MonoBehaviour
 
     private void OnMouseExit()
     {
-        // 全部取消高亮
         foreach (var ol in _outlineList)
             ol.HideOutline();
     }
 
     private void OnMouseDown()
     {
-        // 步骤锁定，防止重复点击
+        // Ignore click if this step is not active
         if (!MainManager.instance.CanClickStep(stepNum))
             return;
 
-        // 弹出对话框
         MainManager.instance.OpenDialog();
     }
 }
